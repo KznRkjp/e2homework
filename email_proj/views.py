@@ -10,11 +10,12 @@ from django.shortcuts import render
 import datetime
 import threading
 import time
+import os
 # Create your views here.
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return HttpResponse("Hello, world.")
 
 def e_list(request):
     e_mails = E_mail.objects.all().order_by('-id')[:10]
@@ -37,7 +38,7 @@ class SendFormEmail(View):
         e.save()
         #print(e.pk)
         init_send()
-        messages.success(request, ('Email sent successfully.'))
+        messages.success(request, ('Сообщение поставлено в очередь.'))
         return redirect('home1')
 
 def init_send():
@@ -68,9 +69,9 @@ def e_mail_mail(e_mail, delay):
     send_mail(
         'Test e-mail',
         e_mail.text,
-        'test@limehotel.ru', # Admin
+        os.environ.get('DJANGO_HOST_USER'), # Admin
         [
-            'test@limehotel.ru',
+            os.environ.get('DJANGO_HOST_USER'),
         ]
     )
     e_mail.sent = True
