@@ -1,6 +1,6 @@
 {
-  "name": "Personal library",
-  "description": "Personal library on Heroku",
+  "name": "E-mail project (E2)",
+  "description": "Threading",
   "image": "heroku/python",
   "keywords": ["python", "django" ]
 }
