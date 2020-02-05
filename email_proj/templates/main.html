@@ -1,0 +1,97 @@
+<html>
+
+<head>
+    <title>Skillfactory e2 homework - Отправка сообщений в очереди</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 offset-xl-2 py-5">
+                <h1>Отправка сообщений в очереди</h1>
+                <p class="lead">Введите текст сообщения и время задержки</p>
+
+                <form id="contact-form" action="{% url 'send_email' %}" role="form">
+                    {% csrf_token %}
+                    <div class="messages">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="controls">
+                        <div class="row">
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_delay">Задержка отправки, минут (1-100):</label>
+                                    <input id="form_delay" type="number" name="delay" class="form-control"
+                                        min="0" max="100"
+                                        placeholder="0" required="required"
+                                        data-error="Выберите время задержки">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="form_message">Текст сообщения *</label>
+                                    <textarea id="form_message" name="message" class="form-control"
+                                        placeholder="Сообщение для отправки *" rows="4" required="required"
+                                        data-error="Необходимо ввести текст."></textarea>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="submit" class="btn btn-success btn-send" value="Отправить">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+
+                {% if e_mails %}
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Текст</th>
+                      <th scope="col">Задержка (минут)</th>
+                      <th scope="col">Статус</th>
+                      <th scope="col">Добавлено</th>
+                    </tr>
+                  </thead>
+                {% for e_mail in e_mails %}
+                <tbody>
+                  <tr>
+
+                    <td>{{ e_mail.text }}</td>
+                    <td>{{ e_mail.time_to_send }}</td>
+
+                      {% if e_mail.sent %}
+                        <td>Отправлено</td>
+                      {% else %}
+                        <td>Не отправлено</td>
+                      {% endif %}
+                    <td>{{ e_mail.time_stamp }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
